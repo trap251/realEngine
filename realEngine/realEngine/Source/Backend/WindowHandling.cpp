@@ -1,6 +1,8 @@
-#include "engineWindow.h"
+#include "WindowHandling.h"
+#include "API/OpenGL/OpenGL.h"
+#include <iostream>
 
-namespace engineWindow {
+namespace WindowHandling {
     API g_api = API::OpenGL;
     WindowMode g_windowMode = WindowMode::WINDOWED;
     GLFWwindow* g_window = NULL;
@@ -13,15 +15,13 @@ namespace engineWindow {
     int g_currentWidth = 0;
     int g_currentHeight = 0;
 
-    bool engineWindow::Init(API api, WindowMode windowMode)
+    bool WindowHandling::Init(API api, WindowMode windowMode)
     {
         g_api = api;
         g_windowMode = windowMode;
 
-        if (!glfwInit()) {
-            return false;
-        }
-
+        if (!glfwInit()) return false;
+        
         if (g_api == API::OpenGL) {
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -29,36 +29,46 @@ namespace engineWindow {
         }
 
         g_primaryMonitor = glfwGetPrimaryMonitor();
-        g_videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        g_videoMode = glfwGetVideoMode(g_primaryMonitor);
         g_fullscreenWidth = g_videoMode->width;
         g_fullscreenHeight = g_videoMode->height;
         g_windowedWidth = g_fullscreenWidth * 0.75f;
         g_windowedHeight = g_fullscreenHeight * 0.75f;
 
-        if (g_windowMode == WindowMode::FULLSCREEN) {
+        if (!WindowHandling::SetWindowMode(g_windowMode)) return false;
+
+        //if (g_api == API::OpenGL) {
+        //    glfwSetFramebufferSizeCallback(g_window, WindowHandling::m_framebuffer_size_callback);
+        //}
+        return true;
+    }
+
+    GLFWwindow* GetWindowPointer()
+    {
+        return g_window;
+    }
+
+    bool SetWindowMode(WindowMode windowMode) {
+        if (g_window) {
+            glfwDestroyWindow(g_window);
+        }
+        if (windowMode == WindowMode::FULLSCREEN) {
             g_window = glfwCreateWindow(g_fullscreenWidth, g_fullscreenHeight, "realEngine", NULL, NULL);
             g_currentWidth = g_fullscreenWidth;
             g_currentHeight = g_fullscreenHeight;
         }
-        else if (g_windowMode == WindowMode::WINDOWED) {
+        else if (windowMode == WindowMode::WINDOWED) {
             g_window = glfwCreateWindow(g_windowedWidth, g_windowedHeight, "realEngine", NULL, NULL);
             g_currentWidth = g_windowedWidth;
             g_currentHeight = g_windowedHeight;
         }
-		if (!g_window) {
+        if (!g_window) {
             std::cerr << "GLFW Window creation failed!" << std::endl;
-			glfwTerminate();
-			return false;
-		}
-
-
-        return false;
+            WindowHandling::Destroy();
+            return false;
+        }
+        return true;
     }
-        
-	GLFWwindow* GetWindow()
-	{
-		return g_window;
-	}
 
     bool WindowIsOpen() {
         return (!glfwWindowShouldClose(g_window));
@@ -74,9 +84,16 @@ namespace engineWindow {
         glfwSwapBuffers(g_window);
     }
 
-    void Kill()
+    void MakeContextCurrent() {
+        glfwMakeContextCurrent(g_window);
+    }
+
+    void Destroy()
     {
         glfwTerminate();
     }
 
+    /*void m_framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+        OpenGL::Viewport(window, width, height);
+    }*/
 }
