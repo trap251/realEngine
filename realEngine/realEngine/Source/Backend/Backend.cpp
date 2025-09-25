@@ -20,7 +20,7 @@ namespace Backend {
 	}
 
 	void PreRender() {
-		WindowHandling::PollEvents();
+		Input::Update();
 	}
 
 	void Render() {
@@ -35,7 +35,7 @@ namespace Backend {
 	}
 
 	void* GetWindowPointer() {
-		return WindowHandling::GetWindowPointer;
+		return WindowHandling::GetWindowPointer();
 	}
 
 	void Cleanup() {

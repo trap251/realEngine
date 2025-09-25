@@ -1,5 +1,5 @@
 #include <glad/glad.h>
-
+#include <GLFW/glfw3.h>
 #include "OpenGL.h"
 #include "Backend/WindowHandling.h"
 #include <iostream>
@@ -7,13 +7,12 @@
 namespace OpenGL {
 	void Init()
 	{
-		WindowHandling::MakeContextCurrent();
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 			std::cout << "Failed to load GLAD\n";
 			return;
 		}
 	}
-	void Viewport(GLFWwindow* window, int width, int height) {
+	void setViewport(void* window, int width, int height) {
 		glViewport(0, 0, width, height);
 	}
 	void Clear() {

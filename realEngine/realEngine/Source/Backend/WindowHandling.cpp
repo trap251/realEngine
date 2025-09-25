@@ -1,12 +1,15 @@
 #include "WindowHandling.h"
 #include "API/OpenGL/OpenGL.h"
+#include <GLFW/glfw3.h>
 #include <iostream>
+
+void m_framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 namespace WindowHandling {
     API g_api = API::OpenGL;
     WindowMode g_windowMode = WindowMode::WINDOWED;
-    GLFWwindow* g_window = NULL;
-    GLFWmonitor* g_primaryMonitor = NULL;
+    GLFWwindow* g_window = nullptr;
+    GLFWmonitor* g_primaryMonitor = nullptr;
     const GLFWvidmode* g_videoMode;
     int g_fullscreenWidth = 0;
     int g_fullscreenHeight = 0;
@@ -37,15 +40,16 @@ namespace WindowHandling {
 
         if (!WindowHandling::SetWindowMode(g_windowMode)) return false;
 
-        //if (g_api == API::OpenGL) {
-        //    glfwSetFramebufferSizeCallback(g_window, WindowHandling::m_framebuffer_size_callback);
-        //}
+        if (g_api == API::OpenGL) {
+            glfwMakeContextCurrent(g_window);
+            glfwSetFramebufferSizeCallback(g_window, m_framebuffer_size_callback);
+        }
         return true;
     }
 
-    GLFWwindow* GetWindowPointer()
+    void* GetWindowPointer()
     {
-        return g_window;
+        return (g_window);
     }
 
     bool SetWindowMode(WindowMode windowMode) {
@@ -93,7 +97,22 @@ namespace WindowHandling {
         glfwTerminate();
     }
 
+    int GetWindowWidth() {
+        return g_currentWidth;
+    }
+    
+    int GetWindowHeight() {
+        return g_currentHeight;
+    }
+
+    void Close() {
+        glfwSetWindowShouldClose(g_window, true);
+    }
+
     /*void m_framebuffer_size_callback(GLFWwindow* window, int width, int height) {
         OpenGL::Viewport(window, width, height);
     }*/
+}
+void m_framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    OpenGL::setViewport(window, width, height);
 }
