@@ -3,6 +3,8 @@
 
 int main() {
 	std::cout << "Hello, Real Engine!" << std::endl;
+
+	
 	// Initialize the engine
 	if (!Backend::Init(API::OpenGL, WindowMode::WINDOWED)) {
 		std::cout << "Backend Failed to Initialize\n";
