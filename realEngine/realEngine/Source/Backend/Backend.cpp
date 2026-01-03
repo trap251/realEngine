@@ -21,20 +21,6 @@ namespace Backend {
 			 0.0f,  0.5f, 0.0f
 		};
 
-		const char* vertexShaderSource = 
-			"#version 410 core\n"
-			"layout (location = 0) in vec3 aPos;\n"
-			"void main()\n"
-			"{\n"
-			"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-			"}\0";
-		const char* fragmentShaderSource = 
-			"#version 410 core\n"
-			"out vec4 FragColor;\n"
-			"void main()\n"
-			"{\n"
-			"	FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
-			"}\0";
 		//---------------
 
 		g_api = api;
@@ -50,9 +36,7 @@ namespace Backend {
 		if (api == API::OpenGL) {
 			OpenGL::setBuffers(1, vertices, sizeof(vertices));
 			OpenGL::setVertexArrays(1);
-			unsigned int vertexShader = OpenGL::compileVertexShader(vertexShaderSource);
-			unsigned int fragmentShader = OpenGL::compileFragmentShader(fragmentShaderSource);
-			shaderProgram = OpenGL::shaderProgram(vertexShader, fragmentShader);
+			shaderProgram = OpenGL::loadShader("helloTriangle");
 		}
 		//------------
 

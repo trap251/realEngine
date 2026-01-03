@@ -13,7 +13,6 @@ int main() {
 
 	// Load resources
 	// Start the main loop
-	
 	while (Backend::WindowIsOpen()) {
 		// Poll for events
 		Backend::PreRender();
