@@ -16,7 +16,10 @@ Resources:
 
 www.learnopengl.com
 
+## Screenshots:
 
-Controls: 
+![White Triangle with Blue Background](https://github.com/trap251/realEngine/blob/main/screenshots/helloTriangle.png?raw=true)
+
+## Controls: 
 
 Exit Engine = Escape
