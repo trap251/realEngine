@@ -54,7 +54,9 @@ namespace Backend {
 			OpenGL::setVertexAttributePointer(3, 8, 3 * sizeof(float));
 			// TextureCoord Attribute
 			OpenGL::setVertexAttributePointer(2, 8, 6 * sizeof(float));
-			container_shaderProgram = OpenGL::loadShader("helloTriangle");
+
+			// TEMP - loadShader() loads all shaders in path=Resources/shaders/OpenGL/. objectName parameter is irrelevant
+			container_shaderProgram = OpenGL::loadShader("container");
 		}
 		//------------
 

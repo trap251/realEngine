@@ -110,6 +110,7 @@ namespace OpenGL {
 	}
 	//-------------
 
+	//TEMP - loads all shaders at once, objectName is irrelevant
 	unsigned int loadShader(const char* objectName, const char* shaderPath) {
 		std::vector<unsigned int> compiledShaders;
 		std::string shaderSource = "";
