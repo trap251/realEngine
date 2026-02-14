@@ -23,6 +23,7 @@
     <ClInclude Include="Source\Backend\Backend.h" />
     <ClInclude Include="Source\Backend\WindowHandling.h" />
     <ClInclude Include="Source\Common\realEngineEnums.h" />
+    <ClInclude Include="Source\Common\stb_image.h" />
     <ClInclude Include="Source\Input\Input.h" />
   </ItemGroup>
   <ItemGroup>

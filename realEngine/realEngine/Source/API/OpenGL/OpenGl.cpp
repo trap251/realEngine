@@ -9,7 +9,13 @@
 #include <vector>
 #include <unordered_map>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "Common/stb_image.h"
+
 namespace OpenGL {
+	//TEMP
+	int attributePointerMaxIndex = 0;	// Points to the latest alotted attribute pointer index
+	//--------------
 	void Init()
 	{
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -27,28 +33,83 @@ namespace OpenGL {
 
 	// TEMP ---------------
 
-	void Draw(unsigned int* shaderProgram) {
-		glUseProgram(*shaderProgram);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+	void Draw() {
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
-	unsigned int setBuffers(int x, float vertices[], size_t size) {
+	
+	void useShaderProgram(unsigned int* shaderProgram) {
+		glUseProgram(*shaderProgram);
+	}
+
+	void bindTexture(unsigned int texture) {
+		glBindTexture(GL_TEXTURE_2D, texture);
+	}
+
+	void bindVertexArray(unsigned int vao) {
+		glBindVertexArray(vao);
+	}
+
+	unsigned int genArrayBuffers(float vertices[], size_t size) {
 		unsigned int vbo;
-		glGenBuffers(x, &vbo);
+		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
-		//glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return vbo;
 	}
 
-	unsigned int setVertexArrays(int x) {
+	unsigned genElementArrayBuffers(unsigned int indices[], size_t size) {
+		unsigned int ebo;
+		glGenBuffers(1, &ebo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+		return ebo;
+	}
+
+	unsigned int genVertexArrays() {
 		unsigned int vao;
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-		//glBindVertexArray(0);
 		return vao; 
 	}
+
+	void setVertexAttributePointer(int size, int stride, int offset) {
+		glVertexAttribPointer(attributePointerMaxIndex, size, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void*)(offset));
+		glEnableVertexAttribArray(attributePointerMaxIndex);
+		attributePointerMaxIndex++;
+	}
+
+	void deleteVertexArrays(unsigned int* vao) {
+		glDeleteVertexArrays(1, vao);
+	}
+	void deleteBuffers(unsigned int* vbo) {
+		glDeleteBuffers(1, vbo);
+	}
+
+	//TEMP
+	unsigned int genTextures(const char* textureFilePath) {
+		unsigned int texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		int width, height, nrChannels;
+		unsigned char* data = stbi_load(textureFilePath, &width, &height, &nrChannels, 0);
+		if (data) {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		else
+			std::cout << "Failed to load texture" << std::endl;
+		stbi_image_free(data);
+		
+		return texture;
+	}
+	//-------------
+
 	unsigned int loadShader(const char* objectName, const char* shaderPath) {
 		std::vector<unsigned int> compiledShaders;
 		std::string shaderSource = "";
