@@ -3,11 +3,6 @@
 #include "OpenGL.h"
 #include "Backend/WindowHandling.h"
 #include <iostream>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <unordered_map>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "Common/stb_image.h"
@@ -35,10 +30,6 @@ namespace OpenGL {
 
 	void Draw() {
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	}
-	
-	void useShaderProgram(unsigned int* shaderProgram) {
-		glUseProgram(*shaderProgram);
 	}
 
 	void bindTexture(unsigned int texture) {
@@ -97,6 +88,7 @@ namespace OpenGL {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		int width, height, nrChannels;
+		stbi_set_flip_vertically_on_load(true);
 		unsigned char* data = stbi_load(textureFilePath, &width, &height, &nrChannels, 0);
 		if (data) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -110,76 +102,5 @@ namespace OpenGL {
 	}
 	//-------------
 
-	//TEMP - loads all shaders at once, objectName is irrelevant
-	unsigned int loadShader(const char* objectName, const char* shaderPath) {
-		std::vector<unsigned int> compiledShaders;
-		std::string shaderSource = "";
-		std::unordered_map<std::string, GLenum> shaderTypes{
-			{ ".vert", GL_VERTEX_SHADER },
-			{ ".frag", GL_FRAGMENT_SHADER }
-		};
-
-		std::string baseDir = std::filesystem::path(shaderPath).string();
-
-		unsigned int shaderProgram = glCreateProgram();
-		unsigned int currentShader = 0;
-		std::unordered_map<std::string, std::string> filePathsWithExtensions;
-
-
-		for (const auto& [extension, shaderType] : shaderTypes) {
-			for (std::filesystem::directory_entry file : std::filesystem::directory_iterator(baseDir)) {
-				if (file.path().extension().string() != extension) {
-					continue;
-				}
-				// Extracts the Source Code
-				std::ifstream inputFile(file.path());
-				std::stringstream sourceStream;
-				sourceStream << inputFile.rdbuf();
-				shaderSource = sourceStream.str();
-
-				currentShader = glCreateShader(shaderType);
-
-				// Compile Shader
-				const char* shaderSourceConstChar = shaderSource.c_str();
-				glShaderSource(currentShader, 1, &shaderSourceConstChar, NULL);
-				glCompileShader(currentShader);
-				// CHECK WHETHER SUCCESSFUL
-				int success;
-				char infoLog[512];
-				glGetShaderiv(currentShader, GL_COMPILE_STATUS, &success);
-				if (!success) {
-					glGetShaderInfoLog(currentShader, 512, NULL, infoLog);
-					std::cout << "Error: " << shaderType << " Shader Compilation Failed!\n" << infoLog << std::endl;
-				}
-
-				// ------------------------------------------------
-
-
-				glAttachShader(shaderProgram, currentShader);
-				compiledShaders.push_back(currentShader);
-				currentShader = NULL;
-			}
-
-			}
-
-			glLinkProgram(shaderProgram);
-
-			// CHEcK WHETHER SUCCESSFUL
-			int success;
-			char infoLog[512];
-			glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-			if (!success) {
-				glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-				std::cout << "Error: Shader Program Linking Failed!\n" << infoLog << std::endl;
-			}
-			glUseProgram(shaderProgram);
-			for (unsigned int shader : compiledShaders) {
-				glDeleteShader(shader);
-			}
-			// -----------------------------------
-
-
-			return shaderProgram;
-
-		}
+	
 }

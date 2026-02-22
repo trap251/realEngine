@@ -12,6 +12,7 @@ namespace WindowHandling {
 	void MakeContextCurrent();
 	int GetWindowWidth();
 	int GetWindowHeight();
+	double GetWindowUpTime();
 	void Close();
 
 	//Member Function - Remove from header and Find Alternate Solution ASAP

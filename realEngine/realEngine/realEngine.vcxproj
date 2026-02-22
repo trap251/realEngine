@@ -29,6 +29,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\API\OpenGL\OpenGL.cpp" />
+    <ClCompile Include="Source\API\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="Source\Backend\Backend.cpp" />
     <ClCompile Include="Source\Backend\WindowHandling.cpp" />
     <ClCompile Include="Source\Input\Input.cpp" />

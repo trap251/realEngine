@@ -3,7 +3,9 @@
 #include "API/OpenGL/OpenGL.h"
 #include "Input/Input.h"
 #include <iostream>
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Backend {
 	API g_api;
@@ -22,11 +24,11 @@ namespace Backend {
 
 		//TEMP
 		float vertices[] = {
-			// Positions			// Colors			// Textures Coords
-			 0.5f,  0.5f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f,		// Top Right
-			 0.5f, -0.5f, 0.0f,		0.0f, 1.0f, 0.0f,	1.0f, 0.0f,		// Bottom Right
-			-0.5f, -0.5f, 0.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f,		// Bottom Left
-			-0.5f,	0.5f, 0.0f,		1.0f, 1.0f, 0.0f,	0.0f, 1.0f		// Top Left
+			// Positions			// Textures Coords
+			 0.5f,  0.5f, 0.0f,		1.0f, 1.0f,		// Top Right
+			 0.5f, -0.5f, 0.0f,		1.0f, 0.0f,		// Bottom Right
+			-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,		// Bottom Left
+			-0.5f,	0.5f, 0.0f,		0.0f, 1.0f		// Top Left
 		};
 		unsigned int indices[] = {
 			0, 1, 3,	// First Triangle
@@ -48,15 +50,15 @@ namespace Backend {
 			container_vao = OpenGL::genVertexArrays();
 			container_vbo = OpenGL::genArrayBuffers(vertices, sizeof(vertices));
 			container_ebo = OpenGL::genElementArrayBuffers(indices, sizeof(indices));
+
+			OpenGL::bindVertexArray(container_vao);
 			// Position Attribute
-			OpenGL::setVertexAttributePointer(3, 8, 0);
-			// Color Attribute
-			OpenGL::setVertexAttributePointer(3, 8, 3 * sizeof(float));
+			OpenGL::setVertexAttributePointer(3, 5, 0);
 			// TextureCoord Attribute
-			OpenGL::setVertexAttributePointer(2, 8, 6 * sizeof(float));
+			OpenGL::setVertexAttributePointer(2, 5, 3 * sizeof(float));
 
 			// TEMP - loadShader() loads all shaders in path=Resources/shaders/OpenGL/. objectName parameter is irrelevant
-			container_shaderProgram = OpenGL::loadShader("container");
+			container_shaderProgram = OpenGL::loadShaders();
 		}
 		//------------
 
@@ -74,7 +76,15 @@ namespace Backend {
 	void Render() {
 		OpenGL::Clear();
 		OpenGL::bindTexture(container_texture);
+		// Transformation
+		glm::mat4 transform = glm::mat4(1.0f);
+		transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
+		transform = glm::rotate(transform, sin((float)WindowHandling::GetWindowUpTime()), glm::vec3(0.0f, 0.0f, 1.0f));
+		// --------------
 		OpenGL::useShaderProgram(&container_shaderProgram);
+		// Setting Transform Uniform in shader
+		OpenGL::setMat4(container_shaderProgram, "transform", glm::value_ptr(transform));
+		// -----------------------------------
 		OpenGL::bindVertexArray(container_vao);
 		OpenGL::Draw();
 	}

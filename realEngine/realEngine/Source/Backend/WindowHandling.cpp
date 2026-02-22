@@ -105,6 +105,10 @@ namespace WindowHandling {
         return g_currentHeight;
     }
 
+    double GetWindowUpTime() {
+        return glfwGetTime();
+    }
+
     void Close() {
         glfwSetWindowShouldClose(g_window, true);
     }

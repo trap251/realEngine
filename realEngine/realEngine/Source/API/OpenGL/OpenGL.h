@@ -6,7 +6,6 @@ namespace OpenGL {
 	void Clear();
 	//TEMP
 	void Draw();
-	void useShaderProgram(unsigned int* shaderProgram);
 	void bindTexture(unsigned int texture);
 	void bindVertexArray(unsigned int vao);
 	unsigned int genArrayBuffers(float vertices[], size_t size);
@@ -16,5 +15,21 @@ namespace OpenGL {
 	void deleteVertexArrays(unsigned int* vao);
 	void deleteBuffers(unsigned int* vbo);
 	unsigned int genTextures(const char* textureFilePath);
-	unsigned int loadShader(const char* objectName, const char* shaderPath = "Resources/shaders/OpenGL/");
+
+	// Shader Helper Functions
+	void useShaderProgram(unsigned int* shaderProgramID);
+	unsigned int loadShaders(const char* shaderPath = "Resources/shaders/OpenGL/");
+	void setBool(const int shaderProgramID, const char* name, bool value);
+	void setInt(const int shaderProgramID, const char* name, int value);
+	void setFloat(const int shaderProgramID, const char* name, float value);
+	void setVec2(const int shaderProgramID, const char* name, const float* value);
+	void setVec2(const int shaderProgramID, const char* name, float x, float y);
+	void setVec3(const int shaderProgramID, const char* name, const float *value);
+	void setVec3(const int shaderProgramID, const char* name, float x, float y, float z);
+	void setVec4(const int shaderProgramID, const char* name, const float* value);
+	void setVec4(const int shaderProgramID, const char* name, float x, float y, float z, float w);
+	void setMat2(const int shaderProgramID, const char* name, const float* mat);
+	void setMat3(const int shaderProgramID, const char* name, const float* mat);
+	void setMat4(const int shaderProgramID, const char* name, const float* mat);
+
 }
