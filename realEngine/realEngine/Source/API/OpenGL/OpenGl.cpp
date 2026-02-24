@@ -9,7 +9,7 @@
 
 namespace OpenGL {
 	//TEMP
-	int attributePointerMaxIndex = 0;	// Points to the latest alotted attribute pointer index
+	int m_attributePointerMaxIndex;	// Points to the latest alotted attribute pointer index
 	//--------------
 	void Init()
 	{
@@ -17,19 +17,20 @@ namespace OpenGL {
 			std::cout << "Failed to load GLAD\n";
 			return;
 		}
+		m_attributePointerMaxIndex = 0;
 	}
 	void setViewport(void* window, int width, int height) {
 		glViewport(0, 0, width, height);
 	}
 	void Clear() {
 		glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	// TEMP ---------------
 
 	void Draw() {
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 
 	void bindTexture(unsigned int texture) {
@@ -64,9 +65,9 @@ namespace OpenGL {
 	}
 
 	void setVertexAttributePointer(int size, int stride, int offset) {
-		glVertexAttribPointer(attributePointerMaxIndex, size, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void*)(offset));
-		glEnableVertexAttribArray(attributePointerMaxIndex);
-		attributePointerMaxIndex++;
+		glVertexAttribPointer(m_attributePointerMaxIndex, size, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void*)(offset));
+		glEnableVertexAttribArray(m_attributePointerMaxIndex);
+		m_attributePointerMaxIndex++;
 	}
 
 	void deleteVertexArrays(unsigned int* vao) {
@@ -99,6 +100,10 @@ namespace OpenGL {
 		stbi_image_free(data);
 		
 		return texture;
+	}
+
+	void EnableDepthTest() {
+		glEnable(GL_DEPTH_TEST);
 	}
 	//-------------
 

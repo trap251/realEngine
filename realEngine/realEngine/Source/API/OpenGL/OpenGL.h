@@ -15,6 +15,7 @@ namespace OpenGL {
 	void deleteVertexArrays(unsigned int* vao);
 	void deleteBuffers(unsigned int* vbo);
 	unsigned int genTextures(const char* textureFilePath);
+	void EnableDepthTest();
 
 	// Shader Helper Functions
 	void useShaderProgram(unsigned int* shaderProgramID);
