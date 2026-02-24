@@ -25,3 +25,4 @@ www.learnopengl.com
 ## Controls: 
 
 Exit Engine = Escape
+Look Around = Mouse
