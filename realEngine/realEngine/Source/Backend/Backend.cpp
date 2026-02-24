@@ -133,6 +133,17 @@ namespace Backend {
 			OpenGL::setMat4(container_shaderProgram, "projection", glm::value_ptr(projection));
 			// -----------------------------------
 			OpenGL::bindVertexArray(container_vao);
+			
+			OpenGL::Draw();		//Renders First cube
+
+			//Renders Second Cube
+			model = glm::translate(model, glm::vec3(-3, 0, 2.5));
+			OpenGL::setMat4(container_shaderProgram, "model", glm::value_ptr(model));
+			OpenGL::Draw();
+
+			//Renders Third Cube
+			model = glm::translate(model, glm::vec3(-3, 0, -3));
+			OpenGL::setMat4(container_shaderProgram, "model", glm::value_ptr(model));
 			OpenGL::Draw();
 		}
 	}
