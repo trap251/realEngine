@@ -22,7 +22,7 @@ Steps:
 >2. Learn "Creating a window" at learnopengl.com.  
   Make a WindowHandling class for the GLFW window handling functionality. Files: WindowHandling.h, WindowHandling.cpp
 >3. Make a Backend class to initialize everything and abstract it away from the Main.cpp which has the main() function.  
-  Main.cpp should be absolutely clean and shouldn't directly communicate with Engine components such as WindowHandling, Input, etc. It contains Initialization functions such as WindowHandling::Init();
+  Main.cpp should be absolutely clean and shouldn't directly communicate with Engine components such as WindowHandling, Input, etc. It contains abstracted Initialization functions called from Backend.h such as WindowHandling::Init();
 >4. Have a common Enums file (like realEngineEnums.h).  
   Use Enums to choose and check options. Have enums like API, WindowMode, etc. To set API to OpenGL, for example, you would simply pass API::OpenGL to Backend::Init() like so: Backend::Init(API::OpenGL, WindowMode::WINDOWED). When perfoming any API-specific actions within the engine we would always have if (m_api == API::OpenGL).
 >6. GLFW has input handling functionality.  
