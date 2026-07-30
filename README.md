@@ -1,6 +1,6 @@
 # realEngine
 
-A Graphics Engine with OpenGL and Vulkan Support. Made from Scratch. Easy to get into for beginners.
+A Graphics Engine with OpenGL (and Vulkan soon) Support. Made from Scratch. Easy to get into for beginners.
 
 
 
