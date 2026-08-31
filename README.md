@@ -33,6 +33,7 @@ Steps:
   Add helper functions to the Shader namespace to pass values such as int,float,vec3, mat4, etc. to shaders. There is always an API function for that purpose. 
 >11. Understand Euclidean angles and view, model, and projection matrices.  
   Implement a 'Camera' using these. Camera and Input need to communicate, use Backend to pass pointers to functions instead of intermingling these components. For example, a ProcessMouseMovement function from Camera can be passed to Input::Init() inside Backend. Input::Init() can use it as void (*processMouseMovementFunc_camera). This is how you can pass functions as parameters to other functions. Useful in keeping components separate and engine architecture clean.
+>12. Physical Movement is simply a matter of changing the g_position of Camera by += g_front or -g_front, etc.
 
 Resources:
 
