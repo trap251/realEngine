@@ -8,7 +8,6 @@ namespace Camera {
 
 	float g_yaw = -90.0f;
 	float g_pitch = 0;
-	float g_speed = 2.5f;
 	float g_zoom = 45.0f;
 
 	glm::vec3 g_position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -48,6 +47,26 @@ namespace Camera {
 		if (g_pitch < -89.0f) g_pitch = -89.0f;
 		UpdateVectors();
 	}
+
+	void MoveCamera(CameraMovement moveDirection, float speed) {
+		glm::vec3 vectorDirection = glm::vec3(0.0f);
+		switch (moveDirection) {
+			case CameraMovement::FORWARD:
+				vectorDirection = g_front;
+				break;
+			case CameraMovement::BACKWARD:
+				vectorDirection = -g_front;
+				break;
+			case CameraMovement::RIGHT:
+				vectorDirection = glm::normalize(glm::cross(g_front, g_up));
+				break;
+			case CameraMovement::LEFT:
+				vectorDirection = -glm::normalize(glm::cross(g_front, g_up));
+				break;
+		}
+		g_position += vectorDirection * speed;
+	}
+
 	glm::mat4 GetViewMatrix() {
 		return glm::lookAt(g_position, g_position + g_front, g_up);
 	}

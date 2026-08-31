@@ -11,8 +11,8 @@ enum class WindowMode {
 };
 
 enum class CameraMovement {
-	Forward,
-	Backward,
-	Left, 
-	Right
+	FORWARD,
+	BACKWARD,
+	LEFT, 
+	RIGHT
 };

@@ -1,5 +1,6 @@
 #include "Input.h"
-#include "../Backend/WindowHandling.h"
+#include "Backend/WindowHandling.h"
+#include "Camera/Camera.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <glm/glm.hpp>
@@ -7,6 +8,9 @@
 namespace Input {
 	GLFWwindow* g_window = nullptr;
 	float g_mousesensitivity = 0.1f;
+	float g_cameraspeed = 1.0f;
+	float g_deltatime = 0.0f;
+	float m_lastframe = 0.0f;
 
 	bool m_firstmouse = true;
 	float m_lastx, m_lasty;
@@ -30,20 +34,33 @@ namespace Input {
 		m_processMouseMovementFunction_camera(m_xoffset, m_yoffset, g_mousesensitivity);
 	}
 
-	void keyboard_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-			WindowHandling::Close();
-		}
-	}
 	void Init(void* window, void (*ProcessMouseMovementFunction_camera)(float, float, float) ) {
 		m_firstmouse = true;
 		g_window = static_cast<GLFWwindow*>(window);
 		m_processMouseMovementFunction_camera = ProcessMouseMovementFunction_camera;
-		glfwSetKeyCallback(g_window, keyboard_callback);
 		glfwSetCursorPosCallback(g_window, mouse_callback);
 		glfwSetInputMode(g_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
+
 	void Update() {
-		// TEMP - Find out what to put here lol
+		float currentframe = static_cast<float>(glfwGetTime());
+		g_deltatime = currentframe - m_lastframe;
+		m_lastframe = currentframe;
+
+		if (glfwGetKey(g_window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+			WindowHandling::Close();
+		}	
+		if (glfwGetKey(g_window, GLFW_KEY_W) == GLFW_PRESS) {
+			Camera::MoveCamera(CameraMovement::FORWARD, g_cameraspeed * g_deltatime);
+		}
+		if (glfwGetKey(g_window, GLFW_KEY_S) == GLFW_PRESS) {
+			Camera::MoveCamera(CameraMovement::BACKWARD, g_cameraspeed * g_deltatime);
+		}
+		if (glfwGetKey(g_window, GLFW_KEY_A) == GLFW_PRESS) {
+			Camera::MoveCamera(CameraMovement::LEFT, g_cameraspeed * g_deltatime);
+		}
+		if (glfwGetKey(g_window, GLFW_KEY_D) == GLFW_PRESS) {
+			Camera::MoveCamera(CameraMovement::RIGHT, g_cameraspeed * g_deltatime);
+		}
 	}
 }
