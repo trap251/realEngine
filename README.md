@@ -12,6 +12,7 @@ A Graphics Engine with OpenGL (and Vulkan soon) Support. Made from Scratch. Easy
 
 &nbsp; Exit Engine = Escape  
 &nbsp; Look Around = Mouse
+&nbsp; Move Around = WASD
 
 #### What I've learnt so far:
 
