@@ -18,7 +18,7 @@ namespace WindowHandling {
     int g_currentWidth = 0;
     int g_currentHeight = 0;
 
-    bool WindowHandling::Init(API api, WindowMode windowMode)
+    bool Init(API api, WindowMode windowMode)
     {
         g_api = api;
         g_windowMode = windowMode;

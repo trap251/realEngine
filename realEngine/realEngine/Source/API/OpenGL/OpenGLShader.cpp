@@ -8,7 +8,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
-namespace OpenGL {
+namespace OpenGLShader {
 	unsigned int loadShaders(const char* shaderPath) {
 		std::vector<unsigned int> compiledShaders;
 		std::string shaderSource = "";
