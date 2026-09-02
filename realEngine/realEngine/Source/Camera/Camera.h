@@ -9,4 +9,5 @@ namespace Camera {
 	void ProcessMouseMovement(float xoffset, float yoffset, float sensitivity);
 	void MoveCamera(CameraMovement moveDirection, float velocity);
 	glm::mat4 GetViewMatrix();
+	glm::vec3 getPosition();
 }

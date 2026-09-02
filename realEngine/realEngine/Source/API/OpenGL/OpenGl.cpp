@@ -9,6 +9,8 @@
 
 namespace OpenGL {
 
+	float background_color[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+
 	void Init() {
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 			std::cout << "Failed to load GLAD\n";
@@ -32,7 +34,7 @@ namespace OpenGL {
 		glViewport(0, 0, width, height);
 	}
 	void Clear() {
-		glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
+		glClearColor(background_color[0], background_color[1], background_color[2], background_color[3]);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 

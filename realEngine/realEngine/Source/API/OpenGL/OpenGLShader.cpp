@@ -9,7 +9,11 @@
 #include <glm/glm.hpp>
 
 namespace OpenGLShader {
-	unsigned int loadShaders(const char* shaderPath) {
+	unsigned int loadShader(const char* shaderName, const char* shaderPath) {
+		std::string shaderName_str = std::string(shaderName);
+		// lowercase the shader name to ensure case-insensitive matching
+		std::transform(shaderName_str.begin(), shaderName_str.end(), shaderName_str.begin(), ::tolower);
+
 		std::vector<unsigned int> compiledShaders;
 		std::string shaderSource = "";
 		std::unordered_map<std::string, GLenum> shaderTypes{
@@ -29,6 +33,12 @@ namespace OpenGLShader {
 				if (file.path().extension().string() != extension) {
 					continue;
 				}
+				std::string filename = file.path().stem().string();
+				std::transform(filename.begin(), filename.end(), filename.begin(), ::tolower);
+				if (filename != shaderName_str) {
+					continue;
+				}
+				
 				// Extracts the Source Code
 				std::ifstream inputFile(file.path());
 				std::stringstream sourceStream;

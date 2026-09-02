@@ -69,6 +69,8 @@ namespace Camera {
 
 	glm::mat4 GetViewMatrix() {
 		return glm::lookAt(g_position, g_position + g_front, g_up);
+	}	
+	glm::vec3 getPosition() {
+		return g_position;
 	}
-	
 }
